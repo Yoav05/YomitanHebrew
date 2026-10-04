@@ -19,6 +19,7 @@ rm -rf "$APP_PATH"
 mkdir -p "$APP_PATH/Contents/MacOS" "$APP_PATH/Contents/Resources"
 cp "$BIN_DIR/YomitanHebrew" "$APP_PATH/Contents/MacOS/YomitanHebrew"
 cp "$PROJECT_DIR/Resources/Info.plist" "$APP_PATH/Contents/Info.plist"
+cp "$PROJECT_DIR/Resources/AppIcon.icns" "$APP_PATH/Contents/Resources/AppIcon.icns"
 
 codesign --force --sign - "$APP_PATH"
 echo "$APP_PATH"
