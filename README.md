@@ -23,7 +23,7 @@
 open "dist/Yomitan Hebrew.app"
 ```
 
-Если в системе выбран только Command Line Tools, скрипт автоматически использует Xcode из `/Applications/Xcode.app`.
+Готовое приложение появится в `dist/Yomitan Hebrew.app`. Если в системе выбран только Command Line Tools, скрипт автоматически использует Xcode из `/Applications/Xcode.app`.
 
 После первого запуска:
 
@@ -35,20 +35,48 @@ open "dist/Yomitan Hebrew.app"
 
 AnkiConnect по умолчанию доступен только локально по `http://127.0.0.1:8765`. Приложение не меняет этот адрес и не запускает автоматическую синхронизацию AnkiWeb.
 
-## Разработка
+## Архитектура
+
+```mermaid
+flowchart TB
+    User["Пользователь выделяет слово<br/>в любом приложении"]
+
+    subgraph MacApp["YomitanHebrew · AppKit + SwiftUI"]
+        HotKey["GlobalHotKey"]
+        HotKey --> Reader["SelectedTextReader<br/>Accessibility → Clipboard fallback"]
+        Reader --> ViewModel["LookupViewModel"]
+        Views["LookupView · SettingsView"] <--> ViewModel
+        Settings["AppSettings"] --> HotKey
+        Settings --> ViewModel
+    end
+
+    subgraph Core["YomitanCore"]
+        PealimClient["PealimClient"]
+        PealimClient --> Parsers["JSON parser → HTML fallback"]
+        AnkiClient["AnkiClient · AnkiConnect v6"]
+        Models["Модели словаря и карточек"]
+    end
+
+    User --> HotKey
+    ViewModel --> PealimClient
+    ViewModel --> AnkiClient
+    Models --> ViewModel
+    PealimClient <--> Pealim["pealim.com"]
+    AnkiClient <--> Anki["Anki · 127.0.0.1:8765"]
+    Settings <--> Storage["UserDefaults · Keychain"]
+```
+
+- `YomitanHebrew` отвечает за интерфейс, глобальный хоткей и интеграцию с macOS.
+- `YomitanCore` содержит модели, парсеры Pealim и клиент AnkiConnect без зависимости от интерфейса.
+- Все внешние запросы проходят через `PealimClient` и `AnkiClient`, поэтому их можно тестировать отдельно.
+
+## Разработка и тесты
 
 ```bash
 export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
 swift build --disable-sandbox
 swift test --disable-sandbox
 ```
-
-Основные слои:
-
-- `YomitanCore/Pealim` — сетевой адаптер и изолированный парсер Pealim;
-- `YomitanCore/Anki` — типизированный клиент AnkiConnect v6;
-- `YomitanHebrew/Services` — global hotkey, Accessibility, Keychain;
-- `YomitanHebrew/App` и `Views` — menu bar, floating panel и состояние интерфейса.
 
 ## Pealim и распространение
 
