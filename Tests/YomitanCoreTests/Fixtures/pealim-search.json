@@ -1,0 +1,41 @@
+{
+  "he-words": [
+    {
+      "link": "/ru/dict/663-lechapes/",
+      "lemma": {
+        "he": "לְחַפֵּשׂ",
+        "tr": "лехап`ес"
+      },
+      "root": "ח - פ - שׂ",
+      "form-keys": ["INF--L"],
+      "part-of-speech": "verb",
+      "binyan": "D",
+      "meaning": "искать"
+    },
+    {
+      "link": "/ru/dict/1-ab/",
+      "lemma": {
+        "he": "אָב",
+        "tr": "`ав"
+      },
+      "root": "-",
+      "part-of-speech": "noun",
+      "mishkal": "qotel-s",
+      "meaning": "отец"
+    }
+  ],
+  "ru-words": [
+    {
+      "link": "/ru/dict/999-custom/",
+      "lemma": {
+        "he": "מִלָּה",
+        "tr": "мил`а"
+      },
+      "root": "מ - ל - ל",
+      "form-keys": ["s"],
+      "part-of-speech": "custom-pos",
+      "binyan": "X",
+      "meaning": "тестовое значение"
+    }
+  ]
+}
