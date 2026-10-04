@@ -31,10 +31,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func configureStatusItem() {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        item.button?.image = NSImage(
-            systemSymbolName: "character.book.closed",
-            accessibilityDescription: "Yomitan Hebrew"
-        )
+        if let button = item.button {
+            button.image = StatusBarIcon.make()
+            button.imageScaling = .scaleProportionallyDown
+            button.imagePosition = .imageOnly
+            button.toolTip = "Yomitan Hebrew"
+            button.setAccessibilityLabel("Yomitan Hebrew")
+            button.setAccessibilityHelp("Открыть меню Yomitan Hebrew")
+        }
 
         let menu = NSMenu()
         let lookupItem = NSMenuItem(
